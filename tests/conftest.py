@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app import schemas
 from app.models import User
+from app.schemas.user import UserRoleEnum
 
 
 @pytest.fixture()
@@ -95,6 +96,10 @@ def user_model_out():
     mock_data.middle_name = "Bean"
     mock_data.last_name = "Doe"
     mock_data.disabled = True
+    mock_data.role = "admin"
+    mock_data.temp_pwd = False
+    mock_data.created_at = "2024-12-10T09:17:55.330000"
+    mock_data.updated_at = "2024-12-10T09:17:55.330000"
 
     return mock_data
 
@@ -110,6 +115,10 @@ def user_db_in():
         last_name="Doe",
         disabled=True,
         password="password",
+        role=UserRoleEnum.admin.value,
+        temp_pwd=False,
+        created_at="2024-12-10T09:17:55.330000",
+        updated_at="2024-12-10T09:17:55.330000",
     )
 
 
@@ -125,6 +134,10 @@ def user_db_out():
         last_name="Doe",
         disabled=True,
         password="password",
+        role=UserRoleEnum.admin.value,
+        temp_pwd=False,
+        created_at="2024-12-10T09:17:55.330000",
+        updated_at="2024-12-10T09:17:55.330000",
     )
 
 
@@ -139,6 +152,10 @@ def user_out():
         "middle_name": "Bean",
         "last_name": "Doe",
         "disabled": True,
+        "created_at": "2024-12-10T09:17:55.330000",
+        "role": "admin",
+        "temp_pwd": False,
+        "updated_at": "2024-12-10T09:17:55.330000",
     }
 
 
@@ -155,6 +172,10 @@ def users_out():
                 "middle_name": "Bean",
                 "last_name": "Doe",
                 "disabled": True,
+                "created_at": "2024-12-10T09:17:55.330000",
+                "role": "admin",
+                "temp_pwd": False,
+                "updated_at": "2024-12-10T09:17:55.330000",
             },
             {
                 "id": 2,
@@ -164,6 +185,10 @@ def users_out():
                 "middle_name": "Bean",
                 "last_name": "Doe",
                 "disabled": True,
+                "created_at": "2024-12-10T09:17:55.330000",
+                "role": "admin",
+                "temp_pwd": False,
+                "updated_at": "2024-12-10T09:17:55.330000",
             },
         ],
         "total": 2,

@@ -1,6 +1,17 @@
 """User Schema."""
 
+from datetime import datetime
+from enum import Enum
+
 from pydantic import BaseModel, ConfigDict
+
+
+class UserRoleEnum(str, Enum):
+    """User Roles."""
+
+    admin = "admin"
+    teacher = "teacher"
+    student = "student"
 
 
 class UserBase(BaseModel):
@@ -13,7 +24,11 @@ class UserBase(BaseModel):
     first_name: str | None = None
     middle_name: str | None = None
     last_name: str | None = None
-    disabled: bool | None = None
+    disabled: bool = False
+    role: UserRoleEnum = UserRoleEnum.admin
+    temp_pwd: bool = False
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
 
 class UserIn(UserBase):
