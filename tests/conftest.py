@@ -1,5 +1,6 @@
 """Conftest."""
 
+from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
@@ -107,6 +108,8 @@ def user_model_out():
 @pytest.fixture()
 def user_db_in():
     """Fixture that returns a UserIn schema for creating/updating an item."""
+    # Manually convert datetime fields to ISO format
+
     return schemas.UserIn(
         username="User 1",
         email="user@yahoo.com",
@@ -117,8 +120,8 @@ def user_db_in():
         password="password",
         role=UserRoleEnum.admin.value,
         temp_pwd=False,
-        created_at="2024-12-10T09:17:55.330000",
-        updated_at="2024-12-10T09:17:55.330000",
+        created_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
+        updated_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
     )
 
 

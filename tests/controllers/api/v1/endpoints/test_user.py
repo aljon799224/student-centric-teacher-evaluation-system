@@ -43,7 +43,17 @@ def test_create_user(m_user_uc, user_db_in, user_db_out, user_out):
     m_user_uc_instance = m_user_uc.return_value
     m_user_uc_instance.create_user.return_value = user_db_out
 
-    response = test_client.post(f"{settings.API_PREFIX}/user", json=user_db_in.dict())
+    user_db_in_serialized = user_db_in.model_dump()
+    user_db_in_serialized["created_at"] = user_db_in_serialized[
+        "created_at"
+    ].isoformat()
+    user_db_in_serialized["updated_at"] = user_db_in_serialized[
+        "updated_at"
+    ].isoformat()
+
+    response = test_client.post(
+        f"{settings.API_PREFIX}/user", json=user_db_in_serialized
+    )
 
     assert response.json() == user_out
     assert response.status_code == HTTPStatus.OK
