@@ -1,0 +1,55 @@
+name: fastapi-postgresql
+
+# This workflow is triggered only on pushes to the develop branch
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install Poetry
+      run: curl -sSL https://install.python-poetry.org | python -
+
+    - name: Configure Poetry
+      run: |
+        poetry config virtualenvs.create false
+        poetry config virtualenvs.in-project false
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Run pre-commit on the app folder
+      run: poetry run pre-commit run --all-files --show-diff-on-failure
+
+    - name: Create .env file
+      run: |
+        echo "SQLALCHEMY_DATABASE_URL=postgresql://user:password@db:5432/db" >> .env
+        echo "POSTGRES_DB=db" >> .env
+        echo "POSTGRES_USER=user" >> .env
+        echo "POSTGRES_PASSWORD=password" >> .env
+        echo "PGADMIN_DEFAULT_EMAIL=admin@yahoo.com" >> .env
+        echo "PGADMIN_DEFAULT_PASSWORD=admin" >> .env
+
+    - name: Start Docker Compose
+      run: docker compose up -d --build
+
+    - name: Run alembic migrate
+      run: docker compose exec web bash -c "poetry run alembic upgrade head"
+#
+#    - name: Create initial data
+#      run: docker exec fastapi-postgresql-boilerplate-web_1 bash -c "python -m app.initial_data"
+#
+    - name: Exec into Container and Run pytest
+      run: docker compose exec web bash -c "poetry run pytest --cov=app --cov-report term-missing -vv"

@@ -1,0 +1,52 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.env
+.venv/
+
+# Docker files
+*.dockerfile
+docker-compose.override.yml
+
+# Database files
+*.db
+*.sqlite3
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# IDE specific
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Mac specific
+*.DS_Store
+
+# Miscellaneous
+*.bak
+*.orig
+*.swp
