@@ -62,7 +62,7 @@ Run the unit tests with coverage using the following command:
 
 1. Exec into the container:
     ```commandline 
-   docker compose exec -it <container-id> bash
+   docker exec -it <container-id> bash
 
 2. Start the Poetry shell:
     ```commandline 
