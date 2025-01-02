@@ -19,5 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 api_controller(app)
 add_pagination(app)

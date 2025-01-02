@@ -145,3 +145,34 @@ def test_delete_user_exception(m_repo_user, mock_session, user_db_out):
 
     assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
     assert isinstance(response, JSONResponse)
+
+
+@patch("app.use_cases.user.UserRepository", spec=True)
+def test_update_user(
+    m_repo_user, mock_session, user_db_in, user_db_out, user_model_out
+):
+    """Test update user."""
+    m_repo_user_instance = m_repo_user.return_value
+    m_repo_user_instance.update.return_value = user_model_out
+
+    user_uc = UserUseCase(db=mock_session)
+
+    response = user_uc.update_user(obj_in=user_db_in, _id=1)
+
+    assert response == user_db_out
+
+
+@patch("app.use_cases.user.UserRepository", spec=True)
+def test_update_userr_exception(m_repo_user, mock_session, user_db_in, user_db_out):
+    """Test update user with exception."""
+    m_repo_user_instance = m_repo_user.return_value
+    m_repo_user_instance.update.side_effect = DatabaseException(
+        status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="error"
+    )
+
+    user_uc = UserUseCase(db=mock_session)
+
+    response = user_uc.update_user(obj_in=user_db_in, _id=1)
+
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+    assert isinstance(response, JSONResponse)

@@ -62,6 +62,25 @@ class UserUseCase:
             logger.error(f"Database error occurred while creating user: {e.detail}")
             return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
 
+    def update_user(
+        self,
+        *,
+        _id: int,
+        obj_in: schemas.UserUpdate,
+    ) -> Union[schemas.UserOut, JSONResponse]:
+        """Update user record."""
+        try:
+            user = self.user_repository.get(db=self.db, _id=_id)
+
+            update_user = self.user_repository.update(
+                db=self.db, obj_in=obj_in, db_obj=user
+            )
+            return schemas.UserOut.model_validate(update_user)
+
+        except DatabaseException as e:
+            logger.error(f"Database error occurred while creating user: {e.detail}")
+            return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
+
     def delete_user(self, _id: int) -> Union[schemas.UserOut, JSONResponse]:
         """Delete user record."""
         try:

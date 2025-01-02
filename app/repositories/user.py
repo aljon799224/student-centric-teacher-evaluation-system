@@ -8,11 +8,11 @@ from sqlalchemy.orm import Session
 from app.core.security import get_password_hash, verify_password
 from app.models.user import User
 from app.repositories.base import BaseRepository
-from app.schemas.user import UserIn
+from app.schemas.user import UserIn, UserUpdate
 from exceptions.exceptions import DatabaseException
 
 
-class UserRepository(BaseRepository[User, UserIn, UserIn]):
+class UserRepository(BaseRepository[User, UserIn, UserUpdate]):
     """User Repository Class."""
 
     @staticmethod

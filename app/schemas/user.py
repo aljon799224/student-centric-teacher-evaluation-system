@@ -31,6 +31,12 @@ class UserBase(BaseModel):
     updated_at: datetime | None = None
 
 
+class UserUpdate(UserBase):
+    """User Update Class."""
+
+    pass
+
+
 class UserIn(UserBase):
     """User In Class."""
 

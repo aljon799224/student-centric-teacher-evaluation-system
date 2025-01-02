@@ -9,6 +9,7 @@ from .item import (
 from .user import (
     UserIn,  # noqa: F401
     UserOut,  # noqa: F401
+    UserUpdate,  # noqa: F401
 )
 
 

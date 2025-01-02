@@ -129,3 +129,22 @@ def test_authenticate_wrong_password(m_verify_password, mock_session):
     # Assertions
     mock_session.query.assert_called_once()
     assert result is None
+
+
+def test_update_user_success(mock_session, user_db_update):
+    """Test successful update of a user."""
+    mock_data = User()
+    mock_data.username = "John"
+    mock_data.email = "admin@yahoo.com"
+
+    user_repo = UserRepository(User)
+    update_user = user_repo.update(
+        db=mock_session, obj_in=user_db_update, db_obj=mock_data
+    )
+
+    mock_session.add.assert_called_once()
+    mock_session.commit.assert_called_once()
+    mock_session.refresh.assert_called_once()
+
+    assert update_user is not None
+    assert update_user.username == user_db_update.username

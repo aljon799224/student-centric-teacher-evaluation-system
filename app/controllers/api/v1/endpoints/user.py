@@ -49,6 +49,16 @@ def create(obj_in: schemas.UserIn, db: Session = Depends(get_db)):
     return user
 
 
+@user_router.put("/user/{_id}", response_model=schemas.UserOut)
+def update(_id: int, obj_in: schemas.UserUpdate, db: Session = Depends(get_db)):
+    """Update User."""
+    user_uc = UserUseCase(db=db)
+
+    user = user_uc.update_user(_id=_id, obj_in=obj_in)
+
+    return user
+
+
 @user_router.delete("/user/{_id}", response_model=schemas.UserOut)
 def delete(
     _id: int,

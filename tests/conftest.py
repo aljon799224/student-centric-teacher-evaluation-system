@@ -107,7 +107,7 @@ def user_model_out():
 
 @pytest.fixture()
 def user_db_in():
-    """Fixture that returns a UserIn schema for creating/updating an item."""
+    """Fixture that returns a UserIn schema for creating an item."""
     # Manually convert datetime fields to ISO format
 
     return schemas.UserIn(
@@ -122,6 +122,20 @@ def user_db_in():
         temp_pwd=False,
         created_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
         updated_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
+    )
+
+
+@pytest.fixture()
+def user_db_update():
+    """Fixture that returns a UserUpdate schema for updating an item."""
+    # Manually convert datetime fields to ISO format
+
+    return schemas.UserUpdate(
+        username="User 1 Update",
+        email="user_update@yahoo.com",
+        first_name="John Update",
+        middle_name="Bean Update",
+        last_name="Doe Update",
     )
 
 
