@@ -73,3 +73,25 @@ def test_delete_user(m_user_uc, user_db_out, user_out):
 
     assert response.json() == user_out
     assert response.status_code == HTTPStatus.OK
+
+
+@patch("app.controllers.api.v1.endpoints.user.UserUseCase", spec=True)
+def test_update_user(m_user_uc, user_db_in, user_db_out, user_out):
+    """Test update user."""
+    m_user_uc_instance = m_user_uc.return_value
+    m_user_uc_instance.update_user.return_value = user_db_out
+
+    user_db_in_serialized = user_db_in.model_dump()
+    user_db_in_serialized["created_at"] = user_db_in_serialized[
+        "created_at"
+    ].isoformat()
+    user_db_in_serialized["updated_at"] = user_db_in_serialized[
+        "updated_at"
+    ].isoformat()
+
+    response = test_client.put(
+        f"{settings.API_PREFIX}/user/1", json=user_db_in_serialized
+    )
+
+    assert response.json() == user_out
+    assert response.status_code == HTTPStatus.OK
