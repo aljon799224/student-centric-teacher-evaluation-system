@@ -7,7 +7,7 @@ import pytest
 from sqlalchemy.orm import Session
 
 from app import schemas
-from app.models import User
+from app.models import User, Evaluation
 from app.schemas.user import UserRoleEnum
 
 
@@ -152,7 +152,6 @@ def user_db_out():
         middle_name="Bean",
         last_name="Doe",
         disabled=True,
-        password="password",
         role=UserRoleEnum.admin.value,
         temp_pwd=False,
         created_at="2024-12-10T09:17:55.330000",
@@ -211,6 +210,94 @@ def users_out():
                 "temp_pwd": False,
                 "updated_at": "2024-12-10T09:17:55.330000",
                 "admin_id": None,
+            },
+        ],
+        "total": 2,
+        "page": 1,
+        "size": 10,
+        "pages": None,
+    }
+
+
+################################################ Evaluation
+
+
+@pytest.fixture()
+def evaluation_model_out():
+    """Fixture that returns a pre-configured Evaluation model instance."""
+    mock_data = Evaluation()
+    mock_data.id = 1
+    mock_data.title = "evaluation 1"
+    mock_data.teacher_id = 1
+    mock_data.created_at = "2024-12-10T09:17:55.330000"
+    mock_data.updated_at = "2024-12-10T09:17:55.330000"
+
+    return mock_data
+
+
+@pytest.fixture()
+def evaluation_db_in():
+    """Fixture that returns a EvaluationIn schema for creating an evaluation."""
+    # Manually convert datetime fields to ISO format
+
+    return schemas.EvaluationIn(
+        title="evaluation 1",
+        teacher_id=1,
+        created_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
+        updated_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
+    )
+
+
+@pytest.fixture()
+def evaluation_db_update():
+    """Fixture that returns a EvaluationUpdate schema for updating an evaluation."""
+    # Manually convert datetime fields to ISO format
+
+    return schemas.EvaluationUpdate(title="evaluation 1 Update", teacher_id=2)
+
+
+@pytest.fixture()
+def evaluation_db_out():
+    """Fixture that returns a EvaluationOut schema."""
+    return schemas.EvaluationOut(
+        id=1,
+        title="evaluation 1",
+        teacher_id=1,
+        created_at="2024-12-10T09:17:55.330000",
+        updated_at="2024-12-10T09:17:55.330000",
+    )
+
+
+@pytest.fixture()
+def evaluation_out():
+    """Fixture that returns an evaluation in dictionary."""
+    return {
+        "id": 1,
+        "title": "evaluation 1",
+        "teacher_id": 1,
+        "created_at": "2024-12-10T09:17:55.330000",
+        "updated_at": "2024-12-10T09:17:55.330000",
+    }
+
+
+@pytest.fixture()
+def evaluations_out():
+    """Fixture that returns a paginated list of evaluations in dictionary."""
+    return {
+        "items": [
+            {
+                "id": 1,
+                "title": "evaluation 1",
+                "teacher_id": 1,
+                "created_at": "2024-12-10T09:17:55.330000",
+                "updated_at": "2024-12-10T09:17:55.330000",
+            },
+            {
+                "id": 2,
+                "title": "evaluation 2",
+                "teacher_id": 1,
+                "created_at": "2024-12-10T09:17:55.330000",
+                "updated_at": "2024-12-10T09:17:55.330000",
             },
         ],
         "total": 2,

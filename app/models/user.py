@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime
+from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
@@ -23,3 +24,5 @@ class User(Base):
     admin_id = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    evaluations = relationship("Evaluation", back_populates="user")

@@ -17,3 +17,10 @@ from .token import (
     Token,  # noqa: F401
     TokenPayload,  # noqa: F401
 )
+
+
+from .evaluation import (
+    EvaluationIn,  # noqa: F401
+    EvaluationOut,  # noqa: F401
+    EvaluationUpdate,  # noqa: F401
+)
