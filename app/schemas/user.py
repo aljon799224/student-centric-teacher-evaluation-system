@@ -27,6 +27,7 @@ class UserBase(BaseModel):
     disabled: bool = False
     role: UserRoleEnum = UserRoleEnum.admin
     temp_pwd: bool = False
+    admin_id: int | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
