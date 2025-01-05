@@ -20,5 +20,6 @@ class User(Base):
     hashed_password = Column(String, nullable=True)
     role = Column(String, nullable=True)
     temp_pwd = Column(Boolean, default=False)
+    admin_id = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -26,6 +26,8 @@ def login_access_token_out():
     return {
         "access_token": "access_token",
         "token_type": "bearer",
+        "name": "John Doe",
+        "user_id": 1,
     }
 
 
@@ -173,6 +175,7 @@ def user_out():
         "role": "admin",
         "temp_pwd": False,
         "updated_at": "2024-12-10T09:17:55.330000",
+        "admin_id": None,
     }
 
 
@@ -193,6 +196,7 @@ def users_out():
                 "role": "admin",
                 "temp_pwd": False,
                 "updated_at": "2024-12-10T09:17:55.330000",
+                "admin_id": None,
             },
             {
                 "id": 2,
@@ -206,6 +210,7 @@ def users_out():
                 "role": "admin",
                 "temp_pwd": False,
                 "updated_at": "2024-12-10T09:17:55.330000",
+                "admin_id": None,
             },
         ],
         "total": 2,
