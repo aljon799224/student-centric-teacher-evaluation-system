@@ -46,7 +46,9 @@ class AuthenticationUseCase:
         return {
             "access_token": access_token,
             "token_type": "bearer",
-            "name": " ".join(filter(None, [user.first_name, user.last_name])).title()
+            "name": " ".join(
+                filter(None, [user.role, user.first_name, user.last_name])
+            ).title()
             or "",
             "user_id": user.id,
         }
