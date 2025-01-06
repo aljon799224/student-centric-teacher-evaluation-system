@@ -11,23 +11,60 @@ from app.use_cases.evaluation import EvaluationUseCase
 from exceptions.exceptions import DatabaseException, APIException
 
 
+@patch("app.use_cases.evaluation.UserRepository", spec=True)
 @patch("app.use_cases.evaluation.EvaluationRepository", spec=True)
 @patch("app.use_cases.evaluation.paginate", spec=True)
-def test_get_evaluations(m_paginate, m_repo_evaluation, mock_session):
+def test_get_evaluations(
+    m_paginate, m_repo_evaluation, m_repo_user, mock_session, user_model_out
+):
     """Test get evaluations."""
-    mock_data = [Evaluation(), Evaluation()]
+    # Mock data for evaluations
+    eval_1 = Evaluation()
+    eval_1.title = "title 1"
+    eval_1.teacher_id = 1
+
+    eval_2 = Evaluation()
+    eval_2.title = "title 2"
+    eval_2.teacher_id = 2
+    mock_data = [eval_1, eval_2]
+
+    # Mock the repository calls
     m_repo_evaluation_instance = m_repo_evaluation.return_value
     m_repo_evaluation_instance.get_all.return_value = mock_data
+
+    m_repo_user_instance = m_repo_user.return_value
+    m_repo_user_instance.get.side_effect = [user_model_out, user_model_out]
+
+    # Mock the paginate call
     m_paginate.return_value = Page(
-        items=mock_data, total=len(mock_data), page=1, size=10
+        items=[
+            {"teacher_name": "John Bean Doe", "title": "title 1", "teacher_id": 1},
+            {"teacher_name": "John Bean Doe", "title": "title 2", "teacher_id": 2},
+        ],
+        total=len(mock_data),
+        page=1,
+        size=10,
     )
 
+    # Create an instance of the use case
     evaluation_uc = EvaluationUseCase(db=mock_session)
 
+    # Call the method under test
     response = evaluation_uc.get_evaluations()
-    m_paginate.assert_called_once_with(mock_data)
 
-    assert response.items == mock_data
+    # Verify that paginate was called with the transformed data (dictionaries)
+    m_paginate.assert_called_once_with(
+        [
+            {"teacher_name": "John Bean Doe", "title": "title 1", "teacher_id": 1},
+            {"teacher_name": "John Bean Doe", "title": "title 2", "teacher_id": 2},
+        ]
+    )
+
+    # Assertions to check the response matches the expected values
+    assert response.items == [
+        {"teacher_name": "John Bean Doe", "title": "title 1", "teacher_id": 1},
+        {"teacher_name": "John Bean Doe", "title": "title 2", "teacher_id": 2},
+    ]
     assert response.total == len(mock_data)
     assert response.page == 1
     assert response.size == 10

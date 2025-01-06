@@ -33,3 +33,10 @@ class EvaluationOut(EvaluationBase):
     """Evaluation Out Class."""
 
     id: int
+
+
+class EvaluationsOut(EvaluationBase):
+    """Evaluation Out Class."""
+
+    id: int
+    teacher_name: str | None = None

@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
 from app import schemas
-from app.models import Evaluation
+from app.models import Evaluation, User
 from app.repositories.evaluation import EvaluationRepository
+from app.repositories.user import UserRepository
 from exceptions.exceptions import DatabaseException, APIException
 
 logger = logging.getLogger(__name__)
@@ -23,11 +24,28 @@ class EvaluationUseCase:
         """Initialize with db."""
         self.db = db
         self.evaluation_repository = EvaluationRepository(Evaluation)
+        self.user_repository = UserRepository(User)
 
-    def get_evaluations(self) -> Union[Page[schemas.EvaluationOut], JSONResponse]:
+    def get_evaluations(self) -> Union[Page[schemas.EvaluationsOut], JSONResponse]:
         """Get all evaluations record."""
         try:
+            response = []
+
             evaluations = self.evaluation_repository.get_all(self.db)
+
+            for evaluation in evaluations:
+                user = self.user_repository.get(self.db, evaluation.teacher_id)
+
+                evaluation_dict = {
+                    key: value
+                    for key, value in vars(evaluation).items()
+                    if not key.startswith("_")
+                }
+
+                full_name = f"{user.first_name} {user.middle_name} {user.last_name}"
+                evaluation_dict.update({"teacher_name": full_name})
+
+                response.append(evaluation_dict)
 
         except DatabaseException as e:
             logger.error(
@@ -35,7 +53,7 @@ class EvaluationUseCase:
             )
             return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
 
-        return paginate(evaluations)
+        return paginate(response)
 
     def get_evaluation(self, _id: int) -> Union[schemas.EvaluationOut, JSONResponse]:
         """Get evaluation record."""
