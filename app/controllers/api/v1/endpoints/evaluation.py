@@ -40,7 +40,11 @@ def get(
 
 
 @evaluation_router.post("/evaluation", response_model=schemas.EvaluationOut)
-def create(obj_in: schemas.EvaluationIn, db: Session = Depends(get_db)):
+def create(
+    obj_in: schemas.EvaluationIn,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     """Create evaluation."""
     evaluation_uc = EvaluationUseCase(db=db)
 
@@ -50,7 +54,12 @@ def create(obj_in: schemas.EvaluationIn, db: Session = Depends(get_db)):
 
 
 @evaluation_router.put("/evaluation/{_id}", response_model=schemas.EvaluationOut)
-def update(_id: int, obj_in: schemas.EvaluationUpdate, db: Session = Depends(get_db)):
+def update(
+    _id: int,
+    obj_in: schemas.EvaluationUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     """Update Evaluation."""
     evaluation_uc = EvaluationUseCase(db=db)
 

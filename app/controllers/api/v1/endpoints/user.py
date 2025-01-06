@@ -50,7 +50,12 @@ def create(obj_in: schemas.UserIn, db: Session = Depends(get_db)):
 
 
 @user_router.put("/user/{_id}", response_model=schemas.UserOut)
-def update(_id: int, obj_in: schemas.UserUpdate, db: Session = Depends(get_db)):
+def update(
+    _id: int,
+    obj_in: schemas.UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     """Update User."""
     user_uc = UserUseCase(db=db)
 

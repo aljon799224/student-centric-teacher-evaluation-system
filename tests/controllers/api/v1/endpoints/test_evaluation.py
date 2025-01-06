@@ -55,7 +55,9 @@ def test_create_evaluation(
     ].isoformat()
 
     response = test_client.post(
-        f"{settings.API_PREFIX}/evaluation", json=evaluation_db_in_serialized
+        f"{settings.API_PREFIX}/evaluation",
+        json=evaluation_db_in_serialized,
+        headers={"Authorization": "Bearer TEST_TOKEN"},
     )
 
     assert response.json() == evaluation_out
@@ -95,7 +97,9 @@ def test_update_evaluation(
     ].isoformat()
 
     response = test_client.put(
-        f"{settings.API_PREFIX}/evaluation/1", json=evaluation_db_in_serialized
+        f"{settings.API_PREFIX}/evaluation/1",
+        json=evaluation_db_in_serialized,
+        headers={"Authorization": "Bearer TEST_TOKEN"},
     )
 
     assert response.json() == evaluation_out

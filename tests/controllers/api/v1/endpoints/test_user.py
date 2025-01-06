@@ -90,7 +90,9 @@ def test_update_user(m_user_uc, user_db_in, user_db_out, user_out):
     ].isoformat()
 
     response = test_client.put(
-        f"{settings.API_PREFIX}/user/1", json=user_db_in_serialized
+        f"{settings.API_PREFIX}/user/1",
+        json=user_db_in_serialized,
+        headers={"Authorization": "Bearer TEST_TOKEN"},
     )
 
     assert response.json() == user_out
