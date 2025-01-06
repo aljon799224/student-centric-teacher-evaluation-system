@@ -12,7 +12,7 @@ from app.use_cases.evaluation import EvaluationUseCase
 evaluation_router = APIRouter()
 
 
-@evaluation_router.get("/evaluation", response_model=Page[schemas.EvaluationOut])
+@evaluation_router.get("/evaluation", response_model=Page[schemas.EvaluationsOut])
 def get_all(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_active_user),
