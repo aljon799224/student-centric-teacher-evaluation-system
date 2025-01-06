@@ -28,7 +28,7 @@ jobs:
         poetry config virtualenvs.in-project false
 
     - name: Install dependencies
-      run: poetry install
+      run: poetry install --no-root
 
     - name: Run pre-commit on the app folder
       run: poetry run pre-commit run --all-files --show-diff-on-failure

@@ -54,7 +54,3 @@ unfixable = []
 quote-style = "double"
 skip-magic-trailing-comma = false
 line-ending = "auto"
-
-packages = [
-  { include = "student-centric-teacher-evaluation-system" }
-]
