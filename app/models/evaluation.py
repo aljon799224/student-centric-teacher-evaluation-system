@@ -16,6 +16,7 @@ class Evaluation(Base):
     teacher_id = Column(
         Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
     )
+    admin_id = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

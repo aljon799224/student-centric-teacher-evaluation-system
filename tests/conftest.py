@@ -229,6 +229,7 @@ def evaluation_model_out():
     mock_data.id = 1
     mock_data.title = "evaluation 1"
     mock_data.teacher_id = 1
+    mock_data.admin_id = 1
     mock_data.created_at = "2024-12-10T09:17:55.330000"
     mock_data.updated_at = "2024-12-10T09:17:55.330000"
 
@@ -243,6 +244,7 @@ def evaluation_db_in():
     return schemas.EvaluationIn(
         title="evaluation 1",
         teacher_id=1,
+        admin_id=1,
         created_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
         updated_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
     )
@@ -263,6 +265,7 @@ def evaluation_db_out():
         id=1,
         title="evaluation 1",
         teacher_id=1,
+        admin_id=1,
         created_at="2024-12-10T09:17:55.330000",
         updated_at="2024-12-10T09:17:55.330000",
     )
@@ -275,6 +278,7 @@ def evaluation_out():
         "id": 1,
         "title": "evaluation 1",
         "teacher_id": 1,
+        "admin_id": 1,
         "created_at": "2024-12-10T09:17:55.330000",
         "updated_at": "2024-12-10T09:17:55.330000",
     }
@@ -289,6 +293,7 @@ def evaluations_out():
                 "id": 1,
                 "title": "evaluation 1",
                 "teacher_id": 1,
+                "admin_id": 1,
                 "created_at": "2024-12-10T09:17:55.330000",
                 "updated_at": "2024-12-10T09:17:55.330000",
             },
@@ -296,6 +301,7 @@ def evaluations_out():
                 "id": 2,
                 "title": "evaluation 2",
                 "teacher_id": 1,
+                "admin_id": 1,
                 "created_at": "2024-12-10T09:17:55.330000",
                 "updated_at": "2024-12-10T09:17:55.330000",
             },
