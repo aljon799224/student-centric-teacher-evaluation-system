@@ -39,7 +39,7 @@ def get(
     return evaluation
 
 
-@evaluation_router.post("/evaluation", response_model=schemas.EvaluationOut)
+@evaluation_router.post("/evaluation", response_model=schemas.EvaluationDetailedOut)
 def create(
     obj_in: schemas.EvaluationIn,
     db: Session = Depends(get_db),
@@ -53,7 +53,9 @@ def create(
     return evaluation
 
 
-@evaluation_router.put("/evaluation/{_id}", response_model=schemas.EvaluationOut)
+@evaluation_router.put(
+    "/evaluation/{_id}", response_model=schemas.EvaluationDetailedOut
+)
 def update(
     _id: int,
     obj_in: schemas.EvaluationUpdate,

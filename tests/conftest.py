@@ -96,7 +96,7 @@ def user_model_out():
     mock_data.username = "User 1"
     mock_data.email = "user@yahoo.com"
     mock_data.first_name = "John"
-    mock_data.middle_name = "Bean"
+    mock_data.middle_name = "Doe"
     mock_data.last_name = "Doe"
     mock_data.disabled = True
     mock_data.role = "admin"
@@ -116,7 +116,7 @@ def user_db_in():
         username="User 1",
         email="user@yahoo.com",
         first_name="John",
-        middle_name="Bean",
+        middle_name="Doe",
         last_name="Doe",
         disabled=True,
         password="password",
@@ -136,7 +136,7 @@ def user_db_update():
         username="User 1 Update",
         email="user_update@yahoo.com",
         first_name="John Update",
-        middle_name="Bean Update",
+        middle_name="Doe Update",
         last_name="Doe Update",
     )
 
@@ -149,7 +149,7 @@ def user_db_out():
         username="User 1",
         email="user@yahoo.com",
         first_name="John",
-        middle_name="Bean",
+        middle_name="Doe",
         last_name="Doe",
         disabled=True,
         role=UserRoleEnum.admin.value,
@@ -167,7 +167,7 @@ def user_out():
         "username": "User 1",
         "email": "user@yahoo.com",
         "first_name": "John",
-        "middle_name": "Bean",
+        "middle_name": "Doe",
         "last_name": "Doe",
         "disabled": True,
         "created_at": "2024-12-10T09:17:55.330000",
@@ -188,7 +188,7 @@ def users_out():
                 "username": "User 1",
                 "email": "user@yahoo.com",
                 "first_name": "John",
-                "middle_name": "Bean",
+                "middle_name": "Doe",
                 "last_name": "Doe",
                 "disabled": True,
                 "created_at": "2024-12-10T09:17:55.330000",
@@ -202,7 +202,7 @@ def users_out():
                 "username": "User 2",
                 "email": "user2@yahoo.com",
                 "first_name": "Jane",
-                "middle_name": "Bean",
+                "middle_name": "Doe",
                 "last_name": "Doe",
                 "disabled": True,
                 "created_at": "2024-12-10T09:17:55.330000",
@@ -272,12 +272,40 @@ def evaluation_db_out():
 
 
 @pytest.fixture()
+def evaluation_detailed_db_out():
+    """Fixture that returns a EvaluationOut schema."""
+    return schemas.EvaluationDetailedOut(
+        id=1,
+        title="evaluation 1",
+        teacher_id=1,
+        teacher_name="John Doe Doe",
+        admin_id=1,
+        created_at="2024-12-10T09:17:55.330000",
+        updated_at="2024-12-10T09:17:55.330000",
+    )
+
+
+@pytest.fixture()
 def evaluation_out():
     """Fixture that returns an evaluation in dictionary."""
     return {
         "id": 1,
         "title": "evaluation 1",
         "teacher_id": 1,
+        "admin_id": 1,
+        "created_at": "2024-12-10T09:17:55.330000",
+        "updated_at": "2024-12-10T09:17:55.330000",
+    }
+
+
+@pytest.fixture()
+def evaluation_detailed_out():
+    """Fixture that returns a detailed evaluation in dictionary."""
+    return {
+        "id": 1,
+        "title": "evaluation 1",
+        "teacher_id": 1,
+        "teacher_name": "John Doe Doe",
         "admin_id": 1,
         "created_at": "2024-12-10T09:17:55.330000",
         "updated_at": "2024-12-10T09:17:55.330000",

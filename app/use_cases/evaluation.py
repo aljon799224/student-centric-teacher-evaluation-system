@@ -72,11 +72,19 @@ class EvaluationUseCase:
         self,
         *,
         obj_in: schemas.EvaluationIn,
-    ) -> Union[schemas.EvaluationOut, JSONResponse]:
+    ) -> Union[schemas.EvaluationDetailedOut, JSONResponse]:
         """Create evaluation record."""
         try:
             evaluation = self.evaluation_repository.create(db=self.db, obj_in=obj_in)
-            return schemas.EvaluationOut.model_validate(evaluation)
+            user = self.user_repository.get(self.db, evaluation.teacher_id)
+            evaluation_dict = (
+                evaluation.__dict__.copy()
+            )  # Create a copy of the dictionary
+            evaluation_dict.pop("_sa_instance_state", None)
+            full_name = f"{user.first_name} {user.middle_name} {user.last_name}"
+            evaluation_dict.update({"teacher_name": full_name})
+
+            return schemas.EvaluationDetailedOut(**evaluation_dict)
 
         except DatabaseException as e:
             logger.error(
@@ -89,7 +97,7 @@ class EvaluationUseCase:
         *,
         _id: int,
         obj_in: schemas.EvaluationUpdate,
-    ) -> Union[schemas.EvaluationOut, JSONResponse]:
+    ) -> Union[schemas.EvaluationDetailedOut, JSONResponse]:
         """Update evaluation record."""
         try:
             evaluation = self.evaluation_repository.get(db=self.db, _id=_id)
@@ -97,7 +105,16 @@ class EvaluationUseCase:
             update_evaluation = self.evaluation_repository.update(
                 db=self.db, obj_in=obj_in, db_obj=evaluation
             )
-            return schemas.EvaluationOut.model_validate(update_evaluation)
+
+            user = self.user_repository.get(self.db, update_evaluation.teacher_id)
+            evaluation_dict = (
+                update_evaluation.__dict__.copy()
+            )  # Create a copy of the dictionary
+            evaluation_dict.pop("_sa_instance_state", None)
+            full_name = f"{user.first_name} {user.middle_name} {user.last_name}"
+            evaluation_dict.update({"teacher_name": full_name})
+
+            return schemas.EvaluationDetailedOut(**evaluation_dict)
 
         except DatabaseException as e:
             logger.error(

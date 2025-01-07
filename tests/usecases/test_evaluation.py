@@ -38,8 +38,8 @@ def test_get_evaluations(
     # Mock the paginate call
     m_paginate.return_value = Page(
         items=[
-            {"teacher_name": "John Bean Doe", "title": "title 1", "teacher_id": 1},
-            {"teacher_name": "John Bean Doe", "title": "title 2", "teacher_id": 2},
+            {"teacher_name": "John Doe Doe", "title": "title 1", "teacher_id": 1},
+            {"teacher_name": "John Doe Doe", "title": "title 2", "teacher_id": 2},
         ],
         total=len(mock_data),
         page=1,
@@ -55,15 +55,15 @@ def test_get_evaluations(
     # Verify that paginate was called with the transformed data (dictionaries)
     m_paginate.assert_called_once_with(
         [
-            {"teacher_name": "John Bean Doe", "title": "title 1", "teacher_id": 1},
-            {"teacher_name": "John Bean Doe", "title": "title 2", "teacher_id": 2},
+            {"teacher_name": "John Doe Doe", "title": "title 1", "teacher_id": 1},
+            {"teacher_name": "John Doe Doe", "title": "title 2", "teacher_id": 2},
         ]
     )
 
     # Assertions to check the response matches the expected values
     assert response.items == [
-        {"teacher_name": "John Bean Doe", "title": "title 1", "teacher_id": 1},
-        {"teacher_name": "John Bean Doe", "title": "title 2", "teacher_id": 2},
+        {"teacher_name": "John Doe Doe", "title": "title 1", "teacher_id": 1},
+        {"teacher_name": "John Doe Doe", "title": "title 2", "teacher_id": 2},
     ]
     assert response.total == len(mock_data)
     assert response.page == 1
@@ -115,23 +115,29 @@ def test_get_evaluation_exception(m_repo_evaluation, mock_session, evaluation_db
     assert isinstance(response, JSONResponse)
 
 
+@patch("app.use_cases.evaluation.UserRepository", spec=True)
 @patch("app.use_cases.evaluation.EvaluationRepository", spec=True)
 def test_create_evaluation(
     m_repo_evaluation,
+    m_repo_user,
     mock_session,
     evaluation_db_in,
     evaluation_model_out,
-    evaluation_db_out,
+    user_model_out,
+    evaluation_detailed_db_out,
 ):
     """Test create evaluation."""
     m_repo_evaluation_instance = m_repo_evaluation.return_value
     m_repo_evaluation_instance.create.return_value = evaluation_model_out
 
+    m_repo_user_instance = m_repo_user.return_value
+    m_repo_user_instance.get.return_value = user_model_out
+
     evaluation_uc = EvaluationUseCase(db=mock_session)
 
     response = evaluation_uc.create_evaluation(obj_in=evaluation_db_in)
 
-    assert response == evaluation_db_out
+    assert response == evaluation_detailed_db_out
 
 
 @patch("app.use_cases.evaluation.EvaluationRepository", spec=True)
@@ -152,23 +158,29 @@ def test_create_evaluation_exception(
     assert isinstance(response, JSONResponse)
 
 
+@patch("app.use_cases.evaluation.UserRepository", spec=True)
 @patch("app.use_cases.evaluation.EvaluationRepository", spec=True)
 def test_update_evaluation(
     m_repo_evaluation,
+    m_repo_user,
     mock_session,
     evaluation_db_in,
-    evaluation_db_out,
     evaluation_model_out,
+    user_model_out,
+    evaluation_detailed_db_out,
 ):
     """Test update evaluation."""
     m_repo_evaluation_instance = m_repo_evaluation.return_value
     m_repo_evaluation_instance.update.return_value = evaluation_model_out
 
+    m_repo_user_instance = m_repo_user.return_value
+    m_repo_user_instance.get.return_value = user_model_out
+
     evaluation_uc = EvaluationUseCase(db=mock_session)
 
     response = evaluation_uc.update_evaluation(_id=1, obj_in=evaluation_db_in)
 
-    assert response == evaluation_db_out
+    assert response == evaluation_detailed_db_out
 
 
 @patch("app.use_cases.evaluation.EvaluationRepository", spec=True)

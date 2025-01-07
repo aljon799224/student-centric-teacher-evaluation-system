@@ -24,4 +24,5 @@ from .evaluation import (
     EvaluationOut,  # noqa: F401
     EvaluationUpdate,  # noqa: F401
     EvaluationsOut,  # noqa: F401
+    EvaluationDetailedOut,  # noqa: F401
 )
