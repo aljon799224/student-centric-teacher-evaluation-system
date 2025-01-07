@@ -71,6 +71,7 @@ Run the unit tests with coverage using the following command:
 3. Run the tests:
     ```commandline 
    pytest --cov=app --cov-report=html:htmlcov --cov-report=term-missing -vv
+   or poetry run pytest --cov=app --cov-report=html:htmlcov --cov-report=term-missing -vv
 
 This will execute the tests and display a coverage report, including any lines not covered.
 

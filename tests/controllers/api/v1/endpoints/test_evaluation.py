@@ -40,11 +40,14 @@ def test_get_evaluation(m_evaluation_uc, evaluation_db_out, evaluation_out):
 
 @patch("app.controllers.api.v1.endpoints.evaluation.EvaluationUseCase", spec=True)
 def test_create_evaluation(
-    m_evaluation_uc, evaluation_db_in, evaluation_db_out, evaluation_out
+    m_evaluation_uc,
+    evaluation_db_in,
+    evaluation_detailed_db_out,
+    evaluation_detailed_out,
 ):
     """Test create evaluation."""
     m_evaluation_uc_instance = m_evaluation_uc.return_value
-    m_evaluation_uc_instance.create_evaluation.return_value = evaluation_db_out
+    m_evaluation_uc_instance.create_evaluation.return_value = evaluation_detailed_db_out
 
     evaluation_db_in_serialized = evaluation_db_in.model_dump()
     evaluation_db_in_serialized["created_at"] = evaluation_db_in_serialized[
@@ -60,7 +63,7 @@ def test_create_evaluation(
         headers={"Authorization": "Bearer TEST_TOKEN"},
     )
 
-    assert response.json() == evaluation_out
+    assert response.json() == evaluation_detailed_out
     assert response.status_code == HTTPStatus.OK
 
 
@@ -82,11 +85,14 @@ def test_delete_evaluation(m_evaluation_uc, evaluation_db_out, evaluation_out):
 
 @patch("app.controllers.api.v1.endpoints.evaluation.EvaluationUseCase", spec=True)
 def test_update_evaluation(
-    m_evaluation_uc, evaluation_db_in, evaluation_db_out, evaluation_out
+    m_evaluation_uc,
+    evaluation_db_in,
+    evaluation_detailed_db_out,
+    evaluation_detailed_out,
 ):
     """Test update evaluation."""
     m_evaluation_uc_instance = m_evaluation_uc.return_value
-    m_evaluation_uc_instance.update_evaluation.return_value = evaluation_db_out
+    m_evaluation_uc_instance.update_evaluation.return_value = evaluation_detailed_db_out
 
     evaluation_db_in_serialized = evaluation_db_in.model_dump()
     evaluation_db_in_serialized["created_at"] = evaluation_db_in_serialized[
@@ -102,5 +108,5 @@ def test_update_evaluation(
         headers={"Authorization": "Bearer TEST_TOKEN"},
     )
 
-    assert response.json() == evaluation_out
+    assert response.json() == evaluation_detailed_out
     assert response.status_code == HTTPStatus.OK
