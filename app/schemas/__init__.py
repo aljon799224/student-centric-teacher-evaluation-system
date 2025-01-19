@@ -12,12 +12,10 @@ from .user import (
     UserUpdate,  # noqa: F401
 )
 
-
 from .token import (
     Token,  # noqa: F401
     TokenPayload,  # noqa: F401
 )
-
 
 from .evaluation import (
     EvaluationIn,  # noqa: F401
@@ -25,4 +23,10 @@ from .evaluation import (
     EvaluationUpdate,  # noqa: F401
     EvaluationsOut,  # noqa: F401
     EvaluationDetailedOut,  # noqa: F401
+)
+
+from .question import (
+    QuestionIn,  # noqa: F401
+    QuestionOut,  # noqa: F401
+    QuestionUpdate,  # noqa: F401
 )

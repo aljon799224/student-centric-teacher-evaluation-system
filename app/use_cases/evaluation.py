@@ -16,7 +16,6 @@ from exceptions.exceptions import DatabaseException, APIException
 logger = logging.getLogger(__name__)
 
 
-# TBC Update function
 class EvaluationUseCase:
     """Evaluation Use Case Class."""
 
@@ -116,7 +115,7 @@ class EvaluationUseCase:
 
             return schemas.EvaluationDetailedOut(**evaluation_dict)
 
-        except DatabaseException as e:
+        except (DatabaseException, APIException) as e:
             logger.error(
                 f"Database error occurred while creating evaluation: {e.detail}"
             )
@@ -125,11 +124,13 @@ class EvaluationUseCase:
     def delete_evaluation(self, _id: int) -> Union[schemas.EvaluationOut, JSONResponse]:
         """Delete evaluation record."""
         try:
-            evaluation_update = self.evaluation_repository.delete(db=self.db, _id=_id)
+            evaluation_delete = self.evaluation_repository.delete(db=self.db, _id=_id)
 
-            return schemas.EvaluationOut.model_validate(evaluation_update)
+            return schemas.EvaluationOut.model_validate(evaluation_delete)
 
         except (DatabaseException, APIException) as e:
+            print("---------asdasdasdasd----------")
+            print(e.detail)
             logger.error(
                 f"Database error occurred while deleting evaluation: {e.detail}"
             )

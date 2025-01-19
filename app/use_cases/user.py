@@ -15,7 +15,6 @@ from exceptions.exceptions import DatabaseException, APIException
 logger = logging.getLogger(__name__)
 
 
-# TBC Update function
 class UserUseCase:
     """User Use Case Class."""
 
@@ -77,7 +76,7 @@ class UserUseCase:
             )
             return schemas.UserOut.model_validate(update_user)
 
-        except DatabaseException as e:
+        except (DatabaseException, APIException) as e:
             logger.error(f"Database error occurred while creating user: {e.detail}")
             return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
 
