@@ -26,3 +26,4 @@ class User(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     evaluations = relationship("Evaluation", back_populates="user")
+    question = relationship("Question", back_populates="user")
