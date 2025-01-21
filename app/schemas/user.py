@@ -19,7 +19,7 @@ class UserBase(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    username: str
+    username: str | None = None
     email: str | None = None
     first_name: str | None = None
     middle_name: str | None = None

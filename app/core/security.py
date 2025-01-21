@@ -1,7 +1,7 @@
 """Security."""
 
 import logging
-from typing import Union
+from typing import Union, Optional
 
 import bcrypt
 
@@ -89,3 +89,12 @@ def get_current_active_user(
 ) -> User:
     """Get current active user."""
     return current_user
+
+
+def verify_password_reset_token(token: str) -> Optional[str]:
+    """Verify password reset for token."""
+    try:
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        return decoded_token["email"]
+    except jwt.JWTError:
+        return None

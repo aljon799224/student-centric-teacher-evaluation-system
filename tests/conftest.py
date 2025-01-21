@@ -28,6 +28,7 @@ def login_access_token_out():
         "token_type": "bearer",
         "name": "John Doe",
         "user_id": 1,
+        "temp_pwd": True,
     }
 
 

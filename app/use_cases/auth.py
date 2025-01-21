@@ -51,4 +51,16 @@ class AuthenticationUseCase:
             ).title()
             or "",
             "user_id": user.id,
+            "temp_pwd": user.temp_pwd,
         }
+
+    # new_password: str, token: str = Body(...)
+    def reset_password(
+        self, new_password: str, token: str
+    ) -> Union[JSONResponse, dict]:
+        """Reset Password."""
+        user = self.user_repository.reset_password(
+            db=self.db, new_password=new_password, token=token
+        )
+
+        return user
