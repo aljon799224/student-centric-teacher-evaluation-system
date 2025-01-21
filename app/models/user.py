@@ -13,7 +13,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, nullable=True)
-    email = Column(String, nullable=True)
+    email = Column(String, unique=True, nullable=True)
     first_name = Column(String, nullable=True)
     middle_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)

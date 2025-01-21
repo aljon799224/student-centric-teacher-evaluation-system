@@ -30,3 +30,5 @@ from .question import (
     QuestionOut,  # noqa: F401
     QuestionUpdate,  # noqa: F401
 )
+
+from .msg import Msg  # noqa: F401
