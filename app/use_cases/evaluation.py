@@ -54,6 +54,39 @@ class EvaluationUseCase:
 
         return paginate(response)
 
+    def get_evaluations_by_teacher_id(
+        self, teacher_id: int
+    ) -> Union[Page[schemas.EvaluationsOut], JSONResponse]:
+        """Get all evaluations record."""
+        try:
+            response = []
+
+            evaluations = self.evaluation_repository.get_all_by_teacher_id(
+                self.db, teacher_id=teacher_id
+            )
+
+            for evaluation in evaluations:
+                user = self.user_repository.get(self.db, evaluation.teacher_id)
+
+                evaluation_dict = {
+                    key: value
+                    for key, value in vars(evaluation).items()
+                    if not key.startswith("_")
+                }
+
+                full_name = f"{user.first_name} {user.middle_name} {user.last_name}"
+                evaluation_dict.update({"teacher_name": full_name})
+
+                response.append(evaluation_dict)
+
+        except DatabaseException as e:
+            logger.error(
+                f"Database error occurred while fetching evaluations: {e.detail}"
+            )
+            return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
+
+        return paginate(response)
+
     def get_evaluation(self, _id: int) -> Union[schemas.EvaluationOut, JSONResponse]:
         """Get evaluation record."""
         try:
