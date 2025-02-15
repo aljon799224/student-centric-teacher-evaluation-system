@@ -43,7 +43,7 @@ jobs:
         echo "PGADMIN_DEFAULT_PASSWORD=admin" >> .env
 
     - name: Start Docker Compose
-      run: docker compose up -d --build
+      run: docker compose down -v && docker compose up -d --build
 
     - name: Run alembic migrate
       run: docker compose exec web bash -c "poetry run alembic upgrade head"
