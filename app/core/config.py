@@ -14,7 +14,7 @@ class Settings:
     API_PREFIX = "/api/v1"
     SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1000000
     TOKEN_URL = API_PREFIX + "/auth/login/token"
     ALGORITHM = "HS256"
 
