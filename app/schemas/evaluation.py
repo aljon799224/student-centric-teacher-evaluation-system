@@ -13,6 +13,7 @@ class EvaluationBase(BaseModel):
     title: str | None = None
     teacher_id: int | None = None
     admin_id: int | None = None
+    is_submitted: bool | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 

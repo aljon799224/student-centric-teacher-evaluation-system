@@ -29,6 +29,7 @@ def login_access_token_out():
         "name": "John Doe",
         "user_id": 1,
         "temp_pwd": True,
+        "role": "admin",
     }
 
 
@@ -231,6 +232,7 @@ def evaluation_model_out():
     mock_data.title = "evaluation 1"
     mock_data.teacher_id = 1
     mock_data.admin_id = 1
+    mock_data.is_submitted = False
     mock_data.created_at = "2024-12-10T09:17:55.330000"
     mock_data.updated_at = "2024-12-10T09:17:55.330000"
 
@@ -246,6 +248,7 @@ def evaluation_db_in():
         title="evaluation 1",
         teacher_id=1,
         admin_id=1,
+        is_submitted=False,
         created_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
         updated_at=datetime(2024, 12, 10, 9, 17, 55, 330000),
     )
@@ -256,7 +259,11 @@ def evaluation_db_update():
     """Fixture that returns a EvaluationUpdate schema for updating an evaluation."""
     # Manually convert datetime fields to ISO format
 
-    return schemas.EvaluationUpdate(title="evaluation 1 Update", teacher_id=2)
+    return schemas.EvaluationUpdate(
+        title="evaluation 1 Update",
+        teacher_id=2,
+        is_submitted=False,
+    )
 
 
 @pytest.fixture()
@@ -266,6 +273,7 @@ def evaluation_db_out():
         id=1,
         title="evaluation 1",
         teacher_id=1,
+        is_submitted=False,
         admin_id=1,
         created_at="2024-12-10T09:17:55.330000",
         updated_at="2024-12-10T09:17:55.330000",
@@ -280,6 +288,7 @@ def evaluation_detailed_db_out():
         title="evaluation 1",
         teacher_id=1,
         teacher_name="John Doe Doe",
+        is_submitted=False,
         admin_id=1,
         created_at="2024-12-10T09:17:55.330000",
         updated_at="2024-12-10T09:17:55.330000",
@@ -294,6 +303,7 @@ def evaluation_out():
         "title": "evaluation 1",
         "teacher_id": 1,
         "admin_id": 1,
+        "is_submitted": False,
         "created_at": "2024-12-10T09:17:55.330000",
         "updated_at": "2024-12-10T09:17:55.330000",
     }
@@ -308,6 +318,7 @@ def evaluation_detailed_out():
         "teacher_id": 1,
         "teacher_name": "John Doe Doe",
         "admin_id": 1,
+        "is_submitted": False,
         "created_at": "2024-12-10T09:17:55.330000",
         "updated_at": "2024-12-10T09:17:55.330000",
     }
@@ -324,6 +335,7 @@ def evaluations_out():
                 "teacher_id": 1,
                 "teacher_name": "John Doe Doe",
                 "admin_id": 1,
+                "is_submitted": False,
                 "created_at": "2024-12-10T09:17:55.330000",
                 "updated_at": "2024-12-10T09:17:55.330000",
             },
@@ -333,6 +345,7 @@ def evaluations_out():
                 "teacher_id": 1,
                 "teacher_name": "John Doe Doe",
                 "admin_id": 1,
+                "is_submitted": False,
                 "created_at": "2024-12-10T09:17:55.330000",
                 "updated_at": "2024-12-10T09:17:55.330000",
             },

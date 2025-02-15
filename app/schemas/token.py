@@ -13,6 +13,7 @@ class Token(BaseModel):
     name: str
     user_id: int
     temp_pwd: bool
+    role: str
 
 
 class TokenPayload(BaseModel):

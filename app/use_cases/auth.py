@@ -52,6 +52,7 @@ class AuthenticationUseCase:
             or "",
             "user_id": user.id,
             "temp_pwd": user.temp_pwd,
+            "role": user.role,
         }
 
     # new_password: str, token: str = Body(...)
