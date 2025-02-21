@@ -12,7 +12,7 @@ from app.use_cases.announcement import AnnouncementUseCase
 announcement_router = APIRouter()
 
 
-@announcement_router.get("/announcement", response_model=Page[schemas.AnnouncementOut])
+@announcement_router.get("/announcement", response_model=Page[schemas.AnnouncementsOut])
 def get_announcements(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_active_user),
@@ -53,7 +53,7 @@ def create(
     return announcement
 
 
-@announcement_router.put("/announcement", response_model=schemas.AnnouncementOut)
+@announcement_router.put("/announcement/{_id}", response_model=schemas.AnnouncementOut)
 def update(
     _id: int,
     obj_in: schemas.AnnouncementIn,

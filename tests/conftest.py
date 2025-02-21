@@ -386,8 +386,20 @@ def announcements_out():
     """Fixture that returns a paginated list of announcements in dictionary."""
     return {
         "items": [
-            {"id": 1, "announcement_text": "Announcement 1", "admin_id": 1},
-            {"id": 2, "announcement_text": "Announcement 2", "admin_id": 1},
+            {
+                "id": 1,
+                "announcement_text": "Announcement 1",
+                "admin_id": 1,
+                "name": "",
+                "role": "admin",
+            },
+            {
+                "id": 2,
+                "announcement_text": "Announcement 2",
+                "admin_id": 1,
+                "name": "",
+                "role": "admin",
+            },
         ],
         "total": 2,
         "page": 1,
