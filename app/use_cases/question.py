@@ -68,7 +68,6 @@ class QuestionUseCase:
         obj_in: schemas.QuestionUpdate,
     ) -> Union[schemas.QuestionOut, JSONResponse]:
         """Update question record."""
-        print("-----12312312312312----")
         try:
             question = self.question_repository.get(db=self.db, _id=_id)
 

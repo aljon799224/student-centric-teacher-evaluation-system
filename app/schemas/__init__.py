@@ -32,3 +32,9 @@ from .question import (
 )
 
 from .msg import Msg  # noqa: F401
+
+from .announcement import (
+    AnnouncementBase,  # noqa: F401
+    AnnouncementIn,  # noqa: F401
+    AnnouncementOut,  # noqa: F401
+)
