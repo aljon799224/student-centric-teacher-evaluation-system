@@ -39,3 +39,16 @@ from .announcement import (
     AnnouncementOut,  # noqa: F401
     AnnouncementsOut,  # noqa: F401
 )
+
+from .evaluation_result import (
+    EvaluationsResultOut,  # noqa: F401
+    EvaluationResultUpdate,  # noqa: F401
+    EvaluationDetailedResultOut,  # noqa: F401
+    EvaluationResultIn,  # noqa: F401
+    EvaluationResultOut,  # noqa: F401
+)
+from .question_result import (
+    QuestionResultOut,  # noqa: F401
+    QuestionResultUpdate,  # noqa: F401
+    QuestionResultIn,  # noqa: F401
+)
