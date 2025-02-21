@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
 from app import schemas
-from app.models import Announcement
+from app.models import Announcement, User
 from app.repositories.announcement import AnnouncementRepository
+from app.repositories.user import UserRepository
 from exceptions.exceptions import DatabaseException, APIException
 
 logger = logging.getLogger(__name__)
@@ -22,11 +23,29 @@ class AnnouncementUseCase:
         """Initialize with db."""
         self.db = db
         self.announcement_repository = AnnouncementRepository(Announcement)
+        self.user_repository = UserRepository(User)
 
-    def get_announcements(self) -> Union[Page[schemas.AnnouncementOut], JSONResponse]:
+    def get_announcements(self) -> Union[Page[schemas.AnnouncementsOut], JSONResponse]:
         """Get all announcements record."""
         try:
+            response = []
             announcements = self.announcement_repository.get_all(self.db)
+
+            for announcement in announcements:
+                user = self.user_repository.get(self.db, announcement.admin_id)
+
+                announcement_dict = {
+                    key: value
+                    for key, value in vars(announcement).items()
+                    if not key.startswith("_")
+                }
+
+                full_name = f"{user.first_name} {user.middle_name} {user.last_name}"
+                announcement_dict.update(
+                    {"name": full_name, "role": user.role.capitalize()}
+                )
+
+                response.append(announcement_dict)
 
         except DatabaseException as e:
             logger.error(
@@ -34,7 +53,7 @@ class AnnouncementUseCase:
             )
             return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
 
-        return paginate(announcements)
+        return paginate(response)
 
     def get_announcement(
         self, _id: int

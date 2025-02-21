@@ -27,3 +27,11 @@ class AnnouncementOut(AnnouncementBase):
     """AnnouncementOut Class."""
 
     id: int
+
+
+class AnnouncementsOut(AnnouncementBase):
+    """AnnouncementOut Class."""
+
+    id: int
+    name: str
+    role: str

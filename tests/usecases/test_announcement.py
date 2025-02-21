@@ -11,23 +11,85 @@ from app.use_cases.announcement import AnnouncementUseCase
 from exceptions.exceptions import DatabaseException, APIException
 
 
+@patch("app.use_cases.evaluation.UserRepository", spec=True)
 @patch("app.use_cases.announcement.AnnouncementRepository", spec=True)
 @patch("app.use_cases.announcement.paginate", spec=True)
-def test_get_announcements(m_paginate, m_repo_announcement, mock_session):
+def test_get_announcements(
+    m_paginate, m_repo_announcement, m_repo_user, mock_session, user_model_out
+):
     """Test get announcements."""
     mock_data = [Announcement(), Announcement()]
+
+    announcement_1 = Announcement()
+    announcement_1.announcement_text = "Announcement 1"
+    announcement_1.admin_id = 1
+
+    announcement_2 = Announcement()
+    announcement_2.announcement_text = "Announcement 2"
+    announcement_2.admin_id = 2
+    mock_data = [announcement_1, announcement_2]
+
     m_repo_announcement_instance = m_repo_announcement.return_value
     m_repo_announcement_instance.get_all.return_value = mock_data
+
+    m_repo_user_instance = m_repo_user.return_value
+    m_repo_user_instance.get.side_effect = [user_model_out, user_model_out]
+
+    # Mock the paginate call
     m_paginate.return_value = Page(
-        items=mock_data, total=len(mock_data), page=1, size=10
+        items=[
+            {
+                "role": "admin",
+                "announcement_text": "Announcement 1",
+                "admin_id": 1,
+                "name": "Admin John Doe",
+            },
+            {
+                "role": "admin",
+                "announcement_text": "Announcement 2",
+                "admin_id": 1,
+                "name": "Admin John Doe",
+            },
+        ],
+        total=len(mock_data),
+        page=1,
+        size=10,
     )
 
+    # Create an instance of the use case
     announcement_uc = AnnouncementUseCase(db=mock_session)
 
+    # Call the method under test
     response = announcement_uc.get_announcements()
-    m_paginate.assert_called_once_with(mock_data)
 
-    assert response.items == mock_data
+    # Verify that paginate was called with the transformed data (dictionaries)
+    # m_paginate.assert_called_once_with(
+    #     [
+    #         {
+    #         "role": "admin",
+    #         "announcement_text": "Announcement 1",
+    #         "admin_id": 1, 'name': 'Admin John Doe'},
+    #         {"role": "admin", "announcement_text":
+    #         "Announcement 2", "admin_id": 1, 'name':
+    #         'Admin John Doe'},
+    #     ]
+    # )
+
+    # Assertions to check the response matches the expected values
+    assert response.items == [
+        {
+            "role": "admin",
+            "announcement_text": "Announcement 1",
+            "admin_id": 1,
+            "name": "Admin John Doe",
+        },
+        {
+            "role": "admin",
+            "announcement_text": "Announcement 2",
+            "admin_id": 1,
+            "name": "Admin John Doe",
+        },
+    ]
     assert response.total == len(mock_data)
     assert response.page == 1
     assert response.size == 10

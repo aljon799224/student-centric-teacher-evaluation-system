@@ -37,4 +37,5 @@ from .announcement import (
     AnnouncementBase,  # noqa: F401
     AnnouncementIn,  # noqa: F401
     AnnouncementOut,  # noqa: F401
+    AnnouncementsOut,  # noqa: F401
 )
