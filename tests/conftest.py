@@ -355,3 +355,42 @@ def evaluations_out():
         "size": 10,
         "pages": None,
     }
+
+
+################################################ Announcement
+
+
+@pytest.fixture()
+def announcement_db_in():
+    """Fixture that returns an AnnouncementIn schema.
+
+    Used for creating/updating an Announcement.
+    """
+    return schemas.AnnouncementIn(announcement_text="New Announcement", admin_id=1)
+
+
+@pytest.fixture()
+def announcement_db_out():
+    """Fixture that returns an AnnouncementOut schema."""
+    return schemas.AnnouncementOut(id=1, announcement_text="Announcement 1", admin_id=1)
+
+
+@pytest.fixture()
+def announcement_out():
+    """Fixture that returns an announcement in dictionary."""
+    return {"id": 1, "announcement_text": "Announcement 1", "admin_id": 1}
+
+
+@pytest.fixture()
+def announcements_out():
+    """Fixture that returns a paginated list of announcements in dictionary."""
+    return {
+        "items": [
+            {"id": 1, "announcement_text": "Announcement 1", "admin_id": 1},
+            {"id": 2, "announcement_text": "Announcement 2", "admin_id": 1},
+        ],
+        "total": 2,
+        "page": 1,
+        "size": 10,
+        "pages": None,
+    }

@@ -27,3 +27,4 @@ class User(Base):
 
     evaluations = relationship("Evaluation", back_populates="user")
     question = relationship("Question", back_populates="user")
+    announcements = relationship("Announcement", back_populates="user")
