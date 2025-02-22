@@ -64,16 +64,59 @@ class EvaluationResultUseCase:
 
         return paginate(response)
 
-    def get_evaluation_results_by_evaluation_id(
+    def get_evaluation_results_by_evaluation_and_admin_id(
         self, evaluation_id: int, admin_id: int
     ) -> Union[Page[schemas.EvaluationResultOut], JSONResponse]:
-        """Get all evaluations record."""
+        """Get all evaluations record by evaluation and admin id."""
         try:
             response = []
 
             evaluation_results = (
                 self.evaluation_result_repository.get_all_by_evaluation_and_admin_id(
                     self.db, evaluation_id=evaluation_id, admin_id=admin_id
+                )
+            )
+
+            for evaluation in evaluation_results:
+                user = self.user_repository.get(self.db, evaluation.teacher_id)
+                user_student = self.user_repository.get(self.db, evaluation.admin_id)
+
+                evaluation_dict = {
+                    key: value
+                    for key, value in vars(evaluation).items()
+                    if not key.startswith("_")
+                }
+
+                full_name = f"{user.first_name} {user.middle_name} {user.last_name}"
+                full_name_student = (
+                    f"{user_student.first_name} "
+                    f"{user_student.middle_name} "
+                    f"{user_student.last_name}"
+                )
+                evaluation_dict.update(
+                    {"teacher_name": full_name, "student_name": full_name_student}
+                )
+
+                response.append(evaluation_dict)
+
+        except DatabaseException as e:
+            logger.error(
+                f"Database error occurred while fetching evaluations: {e.detail}"
+            )
+            return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
+
+        return paginate(response)
+
+    def get_evaluation_results_by_evaluation_id(
+        self, evaluation_id: int
+    ) -> Union[Page[schemas.EvaluationResultOut], JSONResponse]:
+        """Get all evaluations record by evaluation id."""
+        try:
+            response = []
+
+            evaluation_results = (
+                self.evaluation_result_repository.get_all_by_evaluation_id(
+                    self.db, evaluation_id=evaluation_id
                 )
             )
 

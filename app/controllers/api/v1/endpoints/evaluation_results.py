@@ -31,9 +31,28 @@ def get_all(
     "/{evaluation_id}/{admin_id}/evaluation-result",
     response_model=Page[schemas.EvaluationsOut],
 )
-def get_all_by_evaluation_id(
+def get_all_by_evaluation_and_admin_id(
     evaluation_id: int,
     admin_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
+    """Get all evaluation results by evaluation id ad admin id."""
+    evaluation_uc = EvaluationResultUseCase(db=db)
+
+    evaluations = evaluation_uc.get_evaluation_results_by_evaluation_and_admin_id(
+        evaluation_id=evaluation_id, admin_id=admin_id
+    )
+
+    return evaluations
+
+
+@evaluation_result_router.get(
+    "/{evaluation_id}/evaluation-result",
+    response_model=Page[schemas.EvaluationsOut],
+)
+def get_all_by_evaluation_id(
+    evaluation_id: int,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_active_user),
 ):
@@ -41,7 +60,7 @@ def get_all_by_evaluation_id(
     evaluation_uc = EvaluationResultUseCase(db=db)
 
     evaluations = evaluation_uc.get_evaluation_results_by_evaluation_id(
-        evaluation_id=evaluation_id, admin_id=admin_id
+        evaluation_id=evaluation_id
     )
 
     return evaluations

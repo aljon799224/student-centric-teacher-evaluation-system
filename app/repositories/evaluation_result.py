@@ -32,14 +32,14 @@ class EvaluationResultRepository(
         return response
 
     @staticmethod
-    def get_all_by_student_id(
-        db: Session, *, student_id: int
+    def get_all_by_evaluation_id(
+        db: Session, *, evaluation_id: int
     ) -> List[EvaluationResult]:
-        """Get by teacher_id."""
+        """Get by evaluation_id."""
         response = cast(
             List[EvaluationResult],
             db.query(EvaluationResult)
-            .filter(EvaluationResult.admin_id == student_id)
+            .filter(EvaluationResult.evaluation_id == evaluation_id)
             .all(),
         )
 
