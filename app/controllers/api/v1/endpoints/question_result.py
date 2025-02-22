@@ -13,7 +13,7 @@ question_result_router = APIRouter()
 
 
 @question_result_router.get(
-    "/question-result", response_model=Page[schemas.QuestionOut]
+    "/question-result", response_model=Page[schemas.QuestionResultOut]
 )
 def get_question_results(
     db: Session = Depends(get_db),
@@ -28,7 +28,7 @@ def get_question_results(
 
 
 @question_result_router.get(
-    "/question-result/{_id}", response_model=schemas.QuestionOut
+    "/question-result/{_id}", response_model=schemas.QuestionResultOut
 )
 def get_question_result(
     _id: int,
@@ -43,7 +43,9 @@ def get_question_result(
     return question
 
 
-@question_result_router.post("/question-result", response_model=schemas.QuestionOut)
+@question_result_router.post(
+    "/question-result", response_model=schemas.QuestionResultOut
+)
 def create(
     obj_in: schemas.QuestionResultIn,
     db: Session = Depends(get_db),
@@ -58,7 +60,7 @@ def create(
 
 
 @question_result_router.put(
-    "/question-result/{_id}", response_model=schemas.QuestionOut
+    "/question-result/{_id}", response_model=schemas.QuestionResultOut
 )
 def update(
     _id: int,
@@ -75,7 +77,7 @@ def update(
 
 
 @question_result_router.delete(
-    "/question-result/{_id}", response_model=schemas.QuestionOut
+    "/question-result/{_id}", response_model=schemas.QuestionResultOut
 )
 def delete(
     _id: int,

@@ -65,15 +65,15 @@ class EvaluationResultUseCase:
         return paginate(response)
 
     def get_evaluation_results_by_evaluation_id(
-        self, evaluation_id: int
+        self, evaluation_id: int, admin_id: int
     ) -> Union[Page[schemas.EvaluationResultOut], JSONResponse]:
         """Get all evaluations record."""
         try:
             response = []
 
             evaluation_results = (
-                self.evaluation_result_repository.get_all_by_evaluation_id(
-                    self.db, evaluation_id=evaluation_id
+                self.evaluation_result_repository.get_all_by_evaluation_and_admin_id(
+                    self.db, evaluation_id=evaluation_id, admin_id=admin_id
                 )
             )
 
