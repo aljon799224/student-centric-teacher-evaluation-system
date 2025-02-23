@@ -1,6 +1,6 @@
 name: fastapi-postgresql
 
-# This workflow is triggered only on pushes to the develop branch
+# Trigger on pushes to master
 on:
   push:
     branches:
@@ -18,9 +18,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.12
+        cache: poetry
 
     - name: Install Poetry
-      run: curl -sSL https://install.python-poetry.org | python -
+      run: curl -sSL https://install.python-poetry.org | python3 -
 
     - name: Configure Poetry
       run: |
@@ -28,28 +29,43 @@ jobs:
         poetry config virtualenvs.in-project false
 
     - name: Install dependencies
-      run: poetry install --no-root
+      run: poetry install --no-root --no-interaction --no-ansi
 
-    - name: Run pre-commit on the app folder
+    - name: Run pre-commit hooks
       run: poetry run pre-commit run --all-files --show-diff-on-failure
 
     - name: Create .env file
       run: |
-        echo "SQLALCHEMY_DATABASE_URL=postgresql://user:password@db:5432/db" >> .env
-        echo "POSTGRES_DB=db" >> .env
-        echo "POSTGRES_USER=user" >> .env
-        echo "POSTGRES_PASSWORD=password" >> .env
-        echo "PGADMIN_DEFAULT_EMAIL=admin@yahoo.com" >> .env
-        echo "PGADMIN_DEFAULT_PASSWORD=admin" >> .env
+        cat <<EOF > .env
+        SQLALCHEMY_DATABASE_URL=postgresql://user:password@db:5432/db
+        POSTGRES_DB=db
+        POSTGRES_USER=user
+        POSTGRES_PASSWORD=password
+        PGADMIN_DEFAULT_EMAIL=admin@yahoo.com
+        PGADMIN_DEFAULT_PASSWORD=admin
+        EOF
 
     - name: Start Docker Compose
       run: docker compose down -v && docker compose up -d --build
 
-    - name: Run alembic migrate
+    - name: Wait for Database to be Ready
+      run: |
+        echo "Waiting for PostgreSQL to start..."
+        until docker compose exec db pg_isready -U user -d db; do
+          sleep 2
+        done
+        echo "PostgreSQL is ready."
+
+    - name: Reset Database Schema
+      run: |
+        docker compose exec db psql -U user -d db -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
+    - name: Run Alembic Migrations
       run: docker compose exec web bash -c "poetry run alembic upgrade head"
-#
-#    - name: Create initial data
-#      run: docker exec fastapi-postgresql-boilerplate-web_1 bash -c "python -m app.initial_data"
-#
-    - name: Exec into Container and Run pytest
+
+    - name: Run Tests with Coverage
       run: docker compose exec web bash -c "poetry run pytest --cov=app --cov-report term-missing -vv"
+
+    - name: Stop Docker Containers
+      if: always()
+      run: docker compose down -v
