@@ -25,8 +25,12 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    evaluations = relationship("Evaluation", back_populates="user")
+    evaluations = relationship(
+        "Evaluation", back_populates="user", cascade="all, delete-orphan"
+    )
     question = relationship("Question", back_populates="user")
     announcements = relationship("Announcement", back_populates="user")
-    evaluation_results = relationship("EvaluationResult", back_populates="user")
+    evaluation_results = relationship(
+        "EvaluationResult", back_populates="user", cascade="all, delete-orphan"
+    )
     question_results = relationship("QuestionResult", back_populates="user")

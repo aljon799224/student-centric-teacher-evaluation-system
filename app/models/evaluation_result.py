@@ -16,10 +16,10 @@ class EvaluationResult(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=True)
     teacher_id = Column(
-        Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=True
     )
     evaluation_id = Column(
-        Integer, ForeignKey("evaluation.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("evaluation.id", ondelete="CASCADE"), nullable=True
     )
     admin_id = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)

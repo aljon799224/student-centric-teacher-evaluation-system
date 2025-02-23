@@ -128,7 +128,9 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 )
 
             db.delete(obj)
+
             db.commit()
+
             return obj
 
         except APIException as e:
@@ -136,6 +138,8 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             raise e
 
         except Exception as e:
+            print("--123123123asa")
+            print(e)
             raise DatabaseException(
                 status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred during the deletion.",
