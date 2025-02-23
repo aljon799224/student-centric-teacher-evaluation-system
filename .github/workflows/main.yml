@@ -1,6 +1,5 @@
 name: fastapi-postgresql
 
-# Trigger on pushes to master
 on:
   push:
     branches:
@@ -12,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.12
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.12
         cache: poetry
@@ -36,7 +35,8 @@ jobs:
 
     - name: Create .env file
       run: |
-        cat <<EOF > .env
+        echo "Creating .env file..."
+        cat <<EOF > $GITHUB_WORKSPACE/.env
         SQLALCHEMY_DATABASE_URL=postgresql://user:password@db:5432/db
         POSTGRES_DB=db
         POSTGRES_USER=user
@@ -44,27 +44,33 @@ jobs:
         PGADMIN_DEFAULT_EMAIL=admin@yahoo.com
         PGADMIN_DEFAULT_PASSWORD=admin
         EOF
+        cat $GITHUB_WORKSPACE/.env  # Debugging step
+
+    - name: Stop any existing Docker containers
+      run: docker compose down -v || true
 
     - name: Start Docker Compose
-      run: docker compose down -v && docker compose up -d --build
+      run: docker compose up -d --build
 
     - name: Wait for Database to be Ready
       run: |
-        echo "Waiting for PostgreSQL to start..."
-        until docker compose exec db pg_isready -U user -d db; do
+        echo "Waiting for PostgreSQL to be ready..."
+        for i in {1..30}; do
+          docker compose exec db pg_isready -U user -d db && break
+          echo "Waiting..."
           sleep 2
         done
-        echo "PostgreSQL is ready."
+        echo "PostgreSQL is up."
 
     - name: Reset Database Schema
       run: |
         docker compose exec db psql -U user -d db -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 
     - name: Run Alembic Migrations
-      run: docker compose exec web bash -c "poetry run alembic upgrade head"
+      run: docker compose exec web poetry run alembic upgrade head
 
     - name: Run Tests with Coverage
-      run: docker compose exec web bash -c "poetry run pytest --cov=app --cov-report term-missing -vv"
+      run: docker compose exec web poetry run pytest --cov=app --cov-report term-missing -vv
 
     - name: Stop Docker Containers
       if: always()
