@@ -30,8 +30,3 @@ class EvaluationResult(Base):
         "User", back_populates="evaluation_results"
     )  # User role must be teacher in FE
     evaluation = relationship("Evaluation", back_populates="evaluation_results")
-    question_results = relationship(
-        "QuestionResult",
-        back_populates="evaluation_result",
-        cascade="all, delete-orphan",
-    )

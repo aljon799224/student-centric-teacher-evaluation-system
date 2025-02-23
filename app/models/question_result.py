@@ -20,15 +20,10 @@ class QuestionResult(Base):
     student_id = Column(
         Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=True
     )
-    evaluation_result_id = Column(
-        Integer, ForeignKey("evaluation_result.id", ondelete="CASCADE"), nullable=False
-    )
+    evaluation_result_id = Column(Integer, nullable=True)
     student_name = Column(String, nullable=True)
     evaluation_title = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     user = relationship("User", back_populates="question_results")
-    evaluation_result = relationship(
-        "EvaluationResult", back_populates="question_results"
-    )
