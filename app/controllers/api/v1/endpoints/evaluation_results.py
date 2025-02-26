@@ -49,7 +49,7 @@ def get_all_by_evaluation_and_admin_id(
 
 @evaluation_result_router.get(
     "/{evaluation_id}/evaluation-result",
-    response_model=Page[schemas.EvaluationsOut],
+    response_model=Page[schemas.EvaluationDetailedResultOut],
 )
 def get_all_by_evaluation_id(
     evaluation_id: int,
