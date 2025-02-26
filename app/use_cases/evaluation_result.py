@@ -109,7 +109,7 @@ class EvaluationResultUseCase:
 
     def get_evaluation_results_by_evaluation_id(
         self, evaluation_id: int
-    ) -> Union[Page[schemas.EvaluationResultOut], JSONResponse]:
+    ) -> Union[Page[schemas.EvaluationDetailedResultOut], JSONResponse]:
         """Get all evaluations record by evaluation id."""
         try:
             response = []
