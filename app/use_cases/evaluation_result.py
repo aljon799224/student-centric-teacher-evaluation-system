@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
 from app import schemas
-from app.models import EvaluationResult, User
+from app.models import EvaluationResult, User, QuestionResult
 from app.repositories.evaluation_result import EvaluationResultRepository
+from app.repositories.question_result import QuestionResultRepository
 from app.repositories.user import UserRepository
 from exceptions.exceptions import DatabaseException, APIException
 
@@ -23,6 +24,7 @@ class EvaluationResultUseCase:
         """Initialize with db."""
         self.db = db
         self.evaluation_result_repository = EvaluationResultRepository(EvaluationResult)
+        self.question_result_repository = QuestionResultRepository(QuestionResult)
         self.user_repository = UserRepository(User)
 
     def get_evaluation_results(
@@ -149,6 +151,59 @@ class EvaluationResultUseCase:
             return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
 
         return paginate(response)
+
+
+
+    def get_evaluation_results_by_teacher_id(
+        self, teacher_id: int
+    ) -> Union[Page[schemas.EvaluationDetailedResultOut], JSONResponse]:
+        """Get all evaluations record by evaluation id."""
+        try:
+            response = []
+
+            evaluation_results = (
+                self.evaluation_result_repository.get_all_by_teacher_id(
+                    self.db, teacher_id=teacher_id
+                )
+            )
+
+            for evaluation in evaluation_results:
+                user = self.user_repository.get(self.db, evaluation.teacher_id)
+                user_student = self.user_repository.get(self.db, evaluation.admin_id)
+                question_results = self.question_result_repository.get_all_by_evaluation_result_id(
+                    self.db, evaluation_result_id=evaluation.id
+                )
+                ratings = [qr.rating for qr in question_results]
+                average_rating = round(sum(ratings) / len(ratings), 2)
+
+
+
+                evaluation_dict = {
+                    key: value
+                    for key, value in vars(evaluation).items()
+                    if not key.startswith("_")
+                }
+
+                full_name = f"{user.first_name} {user.middle_name} {user.last_name}"
+                full_name_student = (
+                    f"{user_student.first_name} "
+                    f"{user_student.middle_name} "
+                    f"{user_student.last_name}"
+                )
+                evaluation_dict.update(
+                    {"teacher_name": full_name, "student_name": full_name_student, "average": average_rating}
+                )
+
+                response.append(evaluation_dict)
+
+        except DatabaseException as e:
+            logger.error(
+                f"Database error occurred while fetching evaluations: {e.detail}"
+            )
+            return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
+
+        return paginate(response)
+
 
     def get_evaluation_result(
         self, _id: int

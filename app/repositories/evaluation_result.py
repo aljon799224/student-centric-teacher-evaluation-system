@@ -44,3 +44,18 @@ class EvaluationResultRepository(
         )
 
         return response
+
+
+    @staticmethod
+    def get_all_by_teacher_id(
+        db: Session, *, teacher_id: int
+    ) -> List[EvaluationResult]:
+        """Get by teacher_id."""
+        response = cast(
+            List[EvaluationResult],
+            db.query(EvaluationResult)
+            .filter(EvaluationResult.teacher_id == teacher_id)
+            .all(),
+        )
+
+        return response
