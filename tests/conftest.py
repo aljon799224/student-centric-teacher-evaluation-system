@@ -187,31 +187,11 @@ def users_out():
         "items": [
             {
                 "id": 1,
-                "username": "User 1",
-                "email": "user@yahoo.com",
-                "first_name": "John",
-                "middle_name": "Doe",
-                "last_name": "Doe",
-                "disabled": True,
-                "created_at": "2024-12-10T09:17:55.330000",
-                "role": "admin",
-                "temp_pwd": False,
-                "updated_at": "2024-12-10T09:17:55.330000",
-                "admin_id": None,
+
             },
             {
                 "id": 2,
-                "username": "User 2",
-                "email": "user2@yahoo.com",
-                "first_name": "Jane",
-                "middle_name": "Doe",
-                "last_name": "Doe",
-                "disabled": True,
-                "created_at": "2024-12-10T09:17:55.330000",
-                "role": "admin",
-                "temp_pwd": False,
-                "updated_at": "2024-12-10T09:17:55.330000",
-                "admin_id": None,
+
             },
         ],
         "total": 2,

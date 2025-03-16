@@ -43,6 +43,7 @@ class EvaluationDetailedResultOut(EvaluationResultBase):
     id: int
     teacher_name: str | None = None
     student_name: str | None = None
+    average: float | None = None
 
 
 class EvaluationsResultOut(EvaluationResultBase):

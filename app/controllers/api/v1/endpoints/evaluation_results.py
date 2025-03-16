@@ -67,6 +67,26 @@ def get_all_by_evaluation_id(
 
 
 @evaluation_result_router.get(
+    "/evaluation-result/teacher/{teacher_id}",
+    response_model=Page[schemas.EvaluationDetailedResultOut],
+)
+def get_all_by_teacher_id(
+    teacher_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
+    """Get all evaluation results by teacher id"""
+    evaluation_uc = EvaluationResultUseCase(db=db)
+    print("--------asdasd")
+    evaluations = evaluation_uc.get_evaluation_results_by_teacher_id(
+        teacher_id=teacher_id
+    )
+
+    return evaluations
+
+
+
+@evaluation_result_router.get(
     "/evaluation-result/{_id}", response_model=schemas.EvaluationOut
 )
 def get(
