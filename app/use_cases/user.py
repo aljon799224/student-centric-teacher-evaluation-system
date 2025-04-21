@@ -10,6 +10,7 @@ from starlette.responses import JSONResponse
 from app import schemas
 from app.models import User
 from app.repositories.user import UserRepository
+from app.schemas.password import ResetPasswordRequest, EmailSchema
 from exceptions.exceptions import DatabaseException, APIException
 
 logger = logging.getLogger(__name__)
@@ -90,3 +91,13 @@ class UserUseCase:
         except (DatabaseException, APIException) as e:
             logger.error(f"Database error occurred while deleting user: {e.detail}")
             return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
+
+    def forgot_password_otp(self, email: EmailSchema):
+        return self.user_repository.send_otp(db=self.db, email=email)
+
+    def reset_password_otp(
+            self, data: ResetPasswordRequest
+    ):
+        return self.user_repository.reset_password_with_otp(
+            self.db, email=data.email, otp=data.otp, new_password=data.new_password
+        )
