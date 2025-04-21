@@ -15,12 +15,50 @@ from app.core.security import (
 )
 from app.models.user import User
 from app.repositories.base import BaseRepository
+from app.schemas.password import EmailSchema
 from app.schemas.user import UserIn, UserUpdate
 from exceptions.exceptions import DatabaseException
 
 
 class UserRepository(BaseRepository[User, UserIn, UserUpdate]):
     """User Repository Class."""
+
+    FAKE_OTP = "123456"
+
+    def send_otp(self, db: Session, email: EmailSchema) -> JSONResponse:
+        email = email.email
+        user = self.get_by_email(db, email=email)
+        if not user:
+            return JSONResponse(
+                status_code=HTTPStatus.NOT_FOUND,
+                content={"message": "User not found"},
+            )
+
+        # Simulate sending OTP (console log only)
+        print(f"[FAKE OTP] Sent OTP to {email}: {self.FAKE_OTP}")
+        return JSONResponse(content={"message": "OTP sent"})
+
+    def reset_password_with_otp(
+            self, db: Session, email: str, otp: str, new_password: str
+    ) -> JSONResponse:
+        user = self.get_by_email(db, email=email)
+        if not user:
+            return JSONResponse(
+                status_code=HTTPStatus.NOT_FOUND,
+                content={"message": "User not found"},
+            )
+
+        if otp != self.FAKE_OTP:
+            return JSONResponse(
+                status_code=HTTPStatus.BAD_REQUEST,
+                content={"message": "Invalid OTP"},
+            )
+
+        user.hashed_password = get_password_hash(new_password)
+        db.add(user)
+        db.commit()
+
+        return JSONResponse(content={"message": "Password reset successful!"})
 
     @staticmethod
     def get_by_username(db: Session, *, username: str) -> Optional[User]:

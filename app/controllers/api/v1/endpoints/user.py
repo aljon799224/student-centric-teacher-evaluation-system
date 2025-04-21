@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app import schemas, models
 from app.core.security import get_current_active_user
 from app.db.session import get_db
+from app.schemas.password import ResetPasswordRequest, EmailSchema
 from app.use_cases.user import UserUseCase
 
 user_router = APIRouter()
@@ -63,7 +64,6 @@ def update(
 
     return user
 
-
 @user_router.delete("/user/{_id}", response_model=schemas.UserOut)
 def delete(
     _id: int,
@@ -76,3 +76,20 @@ def delete(
     user = user_uc.delete_user(_id=_id)
 
     return user
+
+
+@user_router.post("/send-otp")
+def forgot_password_otp(email: EmailSchema, db: Session = Depends(get_db)):
+    user_uc = UserUseCase(db=db)
+
+    return user_uc.forgot_password_otp(email=email)
+
+@user_router.post("/reset-password-otp")
+def reset_password_otp(
+    data: ResetPasswordRequest, db: Session = Depends(get_db)
+):
+    user_uc = UserUseCase(db=db)
+
+    return user_uc.reset_password_otp(
+        data=data
+    )
