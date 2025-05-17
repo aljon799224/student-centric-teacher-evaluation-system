@@ -17,6 +17,7 @@ class QuestionResultBase(BaseModel):
     evaluation_result_id: int | None = None
     student_name: str | None = None
     evaluation_title: str | None = None
+    category: str | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 

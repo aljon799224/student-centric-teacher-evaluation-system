@@ -25,6 +25,7 @@ class EvaluationResult(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_submitted = Column(Boolean, nullable=True)
+    comment = Column(String, nullable=True)
 
     user = relationship(
         "User", back_populates="evaluation_results"

@@ -77,7 +77,6 @@ def get_all_by_teacher_id(
 ):
     """Get all evaluation results by teacher id"""
     evaluation_uc = EvaluationResultUseCase(db=db)
-    print("--------asdasd")
     evaluations = evaluation_uc.get_evaluation_results_by_teacher_id(
         teacher_id=teacher_id
     )

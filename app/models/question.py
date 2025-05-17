@@ -19,10 +19,11 @@ class Question(Base):
         Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=True
     )
     evaluation_id = Column(
-        Integer, ForeignKey("evaluation.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("evaluation.id", ondelete="CASCADE"), nullable=True
     )
     student_name = Column(String, nullable=True)
     evaluation_title = Column(String, nullable=True)
+    category = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

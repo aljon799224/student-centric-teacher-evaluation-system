@@ -19,9 +19,12 @@ class Evaluation(Base):
         Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
     )
     admin_id = Column(Integer, nullable=True)
+    category = Column(String, nullable=True)
+    comment = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_submitted = Column(Boolean, nullable=True)
+    is_disabled = Column(Boolean, nullable=True)
 
     user = relationship("User", back_populates="evaluations")
     questions = relationship(

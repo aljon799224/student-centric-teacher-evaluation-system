@@ -13,6 +13,7 @@ class QuestionBase(BaseModel):
     question_text: str | None = None
     rating: int | None = None
     comment: str | None = None
+    category: str | None = None
     student_id: int | None = None
     evaluation_id: int | None = None
     student_name: str | None = None

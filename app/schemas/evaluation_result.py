@@ -17,6 +17,7 @@ class EvaluationResultBase(BaseModel):
     is_submitted: bool | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
+    comment: str | None = None
 
 
 class EvaluationResultUpdate(EvaluationResultBase):
@@ -44,6 +45,10 @@ class EvaluationDetailedResultOut(EvaluationResultBase):
     teacher_name: str | None = None
     student_name: str | None = None
     average: float | None = None
+    average_1: float | None = None
+    average_2: float | None = None
+    average_3: float | None = None
+    average_4: float | None = None
 
 
 class EvaluationsResultOut(EvaluationResultBase):

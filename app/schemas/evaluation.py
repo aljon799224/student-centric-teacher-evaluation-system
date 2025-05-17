@@ -14,6 +14,9 @@ class EvaluationBase(BaseModel):
     teacher_id: int | None = None
     admin_id: int | None = None
     is_submitted: bool | None = None
+    is_disabled: bool | None = False
+    category: str | None = None
+    comment: str | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 

@@ -23,6 +23,7 @@ class QuestionResult(Base):
     evaluation_result_id = Column(Integer, nullable=True)
     student_name = Column(String, nullable=True)
     evaluation_title = Column(String, nullable=True)
+    category = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

@@ -29,6 +29,7 @@ class QuestionResultUseCase:
         """Get all question results record."""
         try:
             question_results = self.question_result_repository.get_all(self.db)
+            
 
         except DatabaseException as e:
             logger.error(

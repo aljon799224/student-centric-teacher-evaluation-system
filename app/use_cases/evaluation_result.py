@@ -173,8 +173,18 @@ class EvaluationResultUseCase:
                 question_results = self.question_result_repository.get_all_by_evaluation_result_id(
                     self.db, evaluation_result_id=evaluation.id
                 )
-                ratings = [qr.rating for qr in question_results]
-                average_rating = round(sum(ratings) / len(ratings), 2)
+
+
+                ratings_1 = [qr.rating for qr in question_results if qr.category == 'Personal & Professional Characteristics']
+                ratings_2 = [qr.rating for qr in question_results if qr.category == 'Classroom Teaching']
+                ratings_3 = [qr.rating for qr in question_results if qr.category == 'Classroom Management and Control']
+                ratings_4 = [qr.rating for qr in question_results if qr.category == 'Lesson Plans']
+                average_rating_1 = round(sum(ratings_1) / len(ratings_1), 2) if ratings_1 else 0
+                average_rating_2 = round(sum(ratings_2) / len(ratings_2), 2) if ratings_2 else 0
+                average_rating_3 = round(sum(ratings_3) / len(ratings_3), 2) if ratings_3 else 0
+                average_rating_4 = round(sum(ratings_4) / len(ratings_4), 2) if ratings_4 else 0
+                average_rating = round((average_rating_1 + average_rating_2 + average_rating_3 + average_rating_4) / 4, 2)
+
 
 
 
@@ -191,7 +201,16 @@ class EvaluationResultUseCase:
                     f"{user_student.last_name}"
                 )
                 evaluation_dict.update(
-                    {"teacher_name": full_name, "student_name": full_name_student, "average": average_rating}
+                    {
+                        "teacher_name": full_name,
+                        "student_name": full_name_student,
+                        "average_1": average_rating_1,
+                        "average_2": average_rating_2,
+                        "average_3": average_rating_3,
+                        "average_4": average_rating_4,
+                        "average": average_rating,
+                        "comment": evaluation.comment
+                    }
                 )
 
                 response.append(evaluation_dict)
