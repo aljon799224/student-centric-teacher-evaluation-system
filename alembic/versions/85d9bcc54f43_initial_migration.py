@@ -1,8 +1,8 @@
-"""Initial migrations
+"""Initial migration
 
-Revision ID: 5ef0576b15ae
+Revision ID: 85d9bcc54f43
 Revises: 
-Create Date: 2025-02-26 08:54:49.815748
+Create Date: 2025-05-24 01:18:44.789049
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '5ef0576b15ae'
+revision: str = '85d9bcc54f43'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -60,9 +60,12 @@ def upgrade() -> None:
     sa.Column('title', sa.String(), nullable=True),
     sa.Column('teacher_id', sa.Integer(), nullable=False),
     sa.Column('admin_id', sa.Integer(), nullable=True),
+    sa.Column('category', sa.String(), nullable=True),
+    sa.Column('comment', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('is_submitted', sa.Boolean(), nullable=True),
+    sa.Column('is_disabled', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['teacher_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -76,6 +79,7 @@ def upgrade() -> None:
     sa.Column('evaluation_result_id', sa.Integer(), nullable=True),
     sa.Column('student_name', sa.String(), nullable=True),
     sa.Column('evaluation_title', sa.String(), nullable=True),
+    sa.Column('category', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['student_id'], ['user.id'], ondelete='CASCADE'),
@@ -91,6 +95,7 @@ def upgrade() -> None:
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('is_submitted', sa.Boolean(), nullable=True),
+    sa.Column('comment', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['evaluation_id'], ['evaluation.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['teacher_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -102,9 +107,10 @@ def upgrade() -> None:
     sa.Column('rating', sa.Integer(), nullable=True),
     sa.Column('comment', sa.String(), nullable=True),
     sa.Column('student_id', sa.Integer(), nullable=True),
-    sa.Column('evaluation_id', sa.Integer(), nullable=False),
+    sa.Column('evaluation_id', sa.Integer(), nullable=True),
     sa.Column('student_name', sa.String(), nullable=True),
     sa.Column('evaluation_title', sa.String(), nullable=True),
+    sa.Column('category', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['evaluation_id'], ['evaluation.id'], ondelete='CASCADE'),
